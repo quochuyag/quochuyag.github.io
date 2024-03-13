@@ -1,0 +1,43 @@
+[
+{
+	"uri": "//localhost:1313/vi/",
+	"title": "Bắt đầu với Amazon VPC và AWS CLIENT VPN",
+	"tags": [],
+	"description": "",
+	"content": "Bắt đầu với AWS CLIENT VPN Tổng quan Trong bài lab này, bạn sẽ tìm hiểu các khái niệm cơ bản và thực hành về Amazon VPN. Tìm hiểu các khái niệm chính, va nhu cầu sử dụng VPN .\nNội dung Giới thiệu VPN Cấu hình AWS client VPN Dọn dẹp tài nguyên "
+},
+{
+	"uri": "//localhost:1313/vi/1-introduce/",
+	"title": "Giới thiệu",
+	"tags": [],
+	"description": "",
+	"content": "Giới thiệu Amazon VPN VPN hay Mạng riêng ảo tạo ra kết nối mạng riêng tư giữa các thiết bị thông qua Internet. VPN được sử dụng để truyền dữ liệu một cách an toàn và ẩn danh qua các mạng công cộng. VPN hoạt động bằng cách ẩn địa chỉ IP của người dùng và mã hóa dữ liệu để chỉ người được cấp quyền nhận dữ liệu mới có thể đọc được.\n3 chức năng chính của VPN là: 1. Quyền riêng tư\nNếu không có mạng riêng ảo, dữ liệu cá nhân của bạn như mật khẩu, thông tin thẻ tín dụng và lịch sử duyệt web có thể bị ghi lại và rao bán bởi các bên thứ ba. VPN sử dụng mã hóa để giữ bí mật những thông tin này, đặc biệt là khi bạn kết nối qua mạng Wi-Fi công cộng.\n2. Tính ẩn danh\nĐịa chỉ IP chứa thông tin về vị trí và hoạt động duyệt web của bạn. Tất cả các trang web trên Internet theo dõi dữ liệu này bằng cookie và công nghệ tương tự. Họ có thể nhận dạng bạn bất cứ khi nào bạn ghé thăm trang web của họ. Kết nối VPN sẽ ẩn địa chỉ IP của bạn, để bạn được ẩn danh trên Internet.\n3. Bảo mật\nDịch vụ VPN sử dụng mật mã để bảo vệ kết nối Internet của bạn khỏi những truy cập trái phép. VPN cũng có thể hoạt động như một cơ chế tắt, hủy bỏ các chương trình được chọn trước đó phòng khi có hoạt động đáng ngờ trên Internet. Việc này làm giảm khả năng dữ liệu bị xâm phạm. Những tính năng trên cho phép các công ty cấp quyền truy cập từ xa cho người dùng được ủy quyền thuộc mạng lưới kinh doanh của họ.\nNội dung Giới thiệu Setup Aws Client VPN cleanup Bây giờ chúng ta sẽ cùng nhau cấu hình VPN nhé.\n"
+},
+{
+	"uri": "//localhost:1313/vi/2-awsclientvpn/",
+	"title": "Aws client vpn",
+	"tags": [],
+	"description": "",
+	"content": "Overview Bắt đầu thôi nào\n1. Tao keys Bước 1 Download EasyRSA releases theo hệ điều hành của mình ở đây mình dung windows, nên các command line điều của windows\nHuynh quoc huy\n```foo\rbar\r```\rContent Introduction to VPN Setup AWS client VPC Resource Cleanup "
+},
+{
+	"uri": "//localhost:1313/vi/3-cleanup/",
+	"title": "Cleanup",
+	"tags": [],
+	"description": "",
+	"content": "Start with Amazon VPC and AWS VPN Site-to-Site Overview In this lab, you will explore the fundamentals of Amazon VPC (Virtual Private Cloud) and AWS VPN (Virtual Private Network) Site-to-Site connections. Gain an understanding of essential concepts and features within Amazon VPC, and practice creating a basic VPC. Additionally, learn how to configure a Site-to-Site VPN to establish a connection between an on-premise environment and an AWS VPC environment.\nContent Introduction to VPN Setup AWS client VPC Resource Cleanup "
+},
+{
+	"uri": "//localhost:1313/vi/categories/",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "//localhost:1313/vi/tags/",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]
