@@ -1,0 +1,43 @@
+[
+{
+	"uri": "/vi/",
+	"title": "Bắt đầu với Amazon VPC và AWS CLIENT VPN",
+	"tags": [],
+	"description": "",
+	"content": "Bắt đầu với AWS CLIENT VPN Tổng quan Trong bài lab này, bạn sẽ tìm hiểu các khái niệm cơ bản và thực hành về Amazon VPN. Tìm hiểu các khái niệm chính, va nhu cầu sử dụng VPN .\nNội dung Giới thiệu VPN Cấu hình AWS client VPN Dọn dẹp tài nguyên "
+},
+{
+	"uri": "/vi/1-introduce/",
+	"title": "Giới thiệu",
+	"tags": [],
+	"description": "",
+	"content": "Giới thiệu Amazon VPN VPN hay Mạng riêng ảo tạo ra kết nối mạng riêng tư giữa các thiết bị thông qua Internet. VPN được sử dụng để truyền dữ liệu một cách an toàn và ẩn danh qua các mạng công cộng. VPN hoạt động bằng cách ẩn địa chỉ IP của người dùng và mã hóa dữ liệu để chỉ người được cấp quyền nhận dữ liệu mới có thể đọc được.\n3 chức năng chính của VPN là: 1. Quyền riêng tư\nNếu không có mạng riêng ảo, dữ liệu cá nhân của bạn như mật khẩu, thông tin thẻ tín dụng và lịch sử duyệt web có thể bị ghi lại và rao bán bởi các bên thứ ba. VPN sử dụng mã hóa để giữ bí mật những thông tin này, đặc biệt là khi bạn kết nối qua mạng Wi-Fi công cộng.\n2. Tính ẩn danh\nĐịa chỉ IP chứa thông tin về vị trí và hoạt động duyệt web của bạn. Tất cả các trang web trên Internet theo dõi dữ liệu này bằng cookie và công nghệ tương tự. Họ có thể nhận dạng bạn bất cứ khi nào bạn ghé thăm trang web của họ. Kết nối VPN sẽ ẩn địa chỉ IP của bạn, để bạn được ẩn danh trên Internet.\n3. Bảo mật\nDịch vụ VPN sử dụng mật mã để bảo vệ kết nối Internet của bạn khỏi những truy cập trái phép. VPN cũng có thể hoạt động như một cơ chế tắt, hủy bỏ các chương trình được chọn trước đó phòng khi có hoạt động đáng ngờ trên Internet. Việc này làm giảm khả năng dữ liệu bị xâm phạm. Những tính năng trên cho phép các công ty cấp quyền truy cập từ xa cho người dùng được ủy quyền thuộc mạng lưới kinh doanh của họ.\nNội dung Giới thiệu Setup Aws Client VPN cleanup Bây giờ chúng ta sẽ cùng nhau cấu hình VPN nhé.\n"
+},
+{
+	"uri": "/vi/2-awsclientvpn/",
+	"title": "Aws client vpn",
+	"tags": [],
+	"description": "",
+	"content": "Overview Bắt đầu thôi nào,mô hình chúng ta xây dựng hôm nay là mô hình VPN đơn giản dể tiếp cận\n1. Tao keys Bước 1 Download EasyRSA releases theo hệ điều hành của mình ở đây mình dung windows, nên các command line điều của windows\nSau khi download về bạn giải nén và vào thư mục EasyRSA-3.1.7 và run file EasyRSA-Start.bat\nKhởi tạo môi mới môi trường PKI với lệnh\n./easyrsa init-pki\rTạo mới file CA với lệnh bên dưới, đến phần Common Name bạn có thể nhập [Easy-RSA CA]:vpndemo\n./easyrsa build-ca nopass\rTạo certificate and key cho Server\n./easyrsa build-server-full server nopass\rTạo certificate and key cho Client\n./easyrsa build-client-full client1.domain.tld nopass\rTạo mới thu mục VPNDemo copy các file được tạo vào thu mục\ncp .\\pki\\ca.crt .\\VPNDemo\rcp .\\pki\\issued\\server.crt .\\VPNDemo\\\rcp .\\pki\\issued\\client1.domain.tld.crt .\\VPNDemo\\\rcp .\\pki\\private\\server.key .\\VPNDemo\\\rcp .\\pki\\private\\client1.domain.tld.key .\\VPNDemo\\ Upload server,client certificate và key đến ACM bao gồm AZ ap-southeast-1\naws acm import-certificate --certificate fileb://server.crt --private-key fileb://server.key --certificate-chain fileb://ca.crt\rc:\\EasyRSA-3.1.7-win64\\EasyRSA-3.1.7\\VPNDemo\u0026gt;aws acm import-certificate --certificate fileb://server.crt --private-key fileb://server.key --certificate-chain fileb://ca.crt\r{\r\u0026#34;CertificateArn\u0026#34;: \u0026#34;arn:aws:acm:ap-southeast-1:339713040518:certificate/a8205d40-f792-4342-96b2-436d8f3ec8fd\u0026#34;\r}\raws acm import-certificate --certificate fileb://client1.domain.tld.crt --private-key fileb://client1.domain.tld.key --certificate-chain fileb://ca.crt\rc:\\EasyRSA-3.1.7-win64\\EasyRSA-3.1.7\\VPNDemo\u0026gt;aws acm import-certificate --certificate fileb://client1.domain.tld.crt --private-key fileb://client1.domain.tld.key --certificate-chain fileb://ca.crt\r{\r\u0026#34;CertificateArn\u0026#34;: \u0026#34;arn:aws:acm:ap-southeast-1:339713040518:certificate/a758b9ad-ee17-4dc2-85e6-c158e87f5bc6\u0026#34;\r} Để sử dung đc AWS CLI chúng ta cần configure cho CLI 2. Tạo Client VPN endpoint Login AWS https://ap-southeast-2.signin.aws.amazon.com/\nVPN \u0026gt; Client VPN endpoints \u0026gt; Create Client VPN endpoint \u0026gt; Chon certificate mà ta đã upload bằng CLI chú ý chổ server và client Sau khi tạo VPN chúng ta cần tạo thêm VPC và Subnet dành cho Client VPN endpoint sử dụng cấp phát cho người dùng Sau khi tạo VPN chúng ta cần tạo thêm VPC và Subnet dành cho Client VPN endpoint sử dụng, cấp phát cho người dùng Cuối cùng chúng ta download client configuration để dùng cho client\nFile download có tên downloaded-client-config.ovpn mở bàng node và Copy nội dung file vào cập thẻ client1.domain.tld.crt client1.domain.tld.key OK vậy là chúng ta đã hoàn tất cấu hình phía admin rồi giờ chúng ta qua bước tiếp theo để cấu hình cho Client\n3. Download aws Client VPN for Desktop Chúng ta cần tool vpn để kết nối nên bạn cần vào Download AWS Client VPN for Desktop Sau khi download thì bạn cài đặc AWS VPN Client và import downloaded-client-config.ovpn vào Giờ chúng ta thực hiện kết nối và kiểm tra thành quả của mình thôi nào\nThực hiện kết nối VPN thôi nào khi kết nối xong bạn dùng lệnh kiểm tra IP sẽ thấy IP do AWS client VPN cấp\nContent Introduction to VPN Setup AWS client VPC Resource Cleanup "
+},
+{
+	"uri": "/vi/3-cleanup/",
+	"title": "Cleanup",
+	"tags": [],
+	"description": "",
+	"content": "Do phần này đơn giản là xóa VPN nên mình không quay hình việc này bạn có xóa ngay sau khi kết thúc Lab\nContent Introduction to VPN Setup AWS client VPC Resource Cleanup "
+},
+{
+	"uri": "/vi/categories/",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "/vi/tags/",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]
