@@ -12,21 +12,21 @@
     <title>Aws client vpn :: Bắt đầu với Amazon VPC và AWS VPN Site to Site</title>
 
     
-    <link href="/css/nucleus.css?1710300609" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1710300609" rel="stylesheet">
-    <link href="/css/hybrid.css?1710300609" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1710300609" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1710300609" rel="stylesheet">
-    <link href="/css/auto-complete.css?1710300609" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1710300609" rel="stylesheet">
-    <link href="/css/theme.css?1710300609" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1710300609" rel="stylesheet">
+    <link href="/css/nucleus.css?1710434826" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1710434826" rel="stylesheet">
+    <link href="/css/hybrid.css?1710434826" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1710434826" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1710434826" rel="stylesheet">
+    <link href="/css/auto-complete.css?1710434826" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1710434826" rel="stylesheet">
+    <link href="/css/theme.css?1710434826" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1710434826" rel="stylesheet">
     
-    <link href="/css/theme-workshop.css?1710300609" rel="stylesheet">
+    <link href="/css/theme-workshop.css?1710434826" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1710300609"></script>
+    <script src="/js/jquery-3.3.1.min.js?1710434826"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -57,14 +57,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1710300609"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1710300609"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1710434826"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1710434826"></script>
 <script type="text/javascript">
     
         var baseurl = "\/\/localhost:1313\/\/vi";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1710300609"></script>
+<script type="text/javascript" src="/js/search.js?1710434826"></script>
 
     
   </div>
@@ -174,11 +174,23 @@
               
               
                   
+                    
+                    
+                      <option id="vi" value="//localhost:1313/vi/2-awsclientvpn/" selected>Tiếng Việt</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
               
                   
                     
                     
-                      <option id="vi" value="//localhost:1313/vi/2-awsclientvpn/" selected>Tiếng Việt</option>
+                      <option id="en" value="//localhost:1313/2-awsclientvpn/">English</option>
                     
                   
               
@@ -306,15 +318,73 @@
 
 
 	<h4 id="overview">Overview</h4>
-<p>Bắt đầu thôi nào</p>
+<p>Bắt đầu thôi nào,mô hình chúng ta xây dựng hôm nay là mô hình VPN đơn giản dể tiếp cận</p>
+<p><img alt="VPN" src="/images/1-Introduce/VPN.png?featherlight=false&width=50pc"></p>
 <h4 id="1-tao-keys">1. Tao keys</h4>
 <h5 id="bước-1">Bước 1</h5>
 <p>Download  <a href="https://github.com/OpenVPN/easy-rsa/releases">EasyRSA releases</a> theo hệ điều hành của mình ở đây mình dung windows, nên các command line điều của windows</p>
-<p><a href="http://assemble.io">Huynh quoc huy</a></p>
-<pre><code>```foo
-bar
-```
+<p>Sau khi download về bạn giải nén và vào thư mục EasyRSA-3.1.7 và run file <strong>EasyRSA-Start.bat</strong></p>
+<p><img alt="EasyRSA" src="/images/1-Introduce/EasyRSA.png?featherlight=false&width=50pc">
+Khởi tạo môi  mới môi trường PKI với lệnh</p>
+<pre><code>./easyrsa init-pki
 </code></pre>
+<p>Tạo mới file CA với lệnh bên dưới, đến phần Common Name bạn có thể nhập [Easy-RSA CA]:<strong>vpndemo</strong></p>
+<pre><code>./easyrsa build-ca nopass
+</code></pre>
+<p>Tạo certificate and key cho Server</p>
+<pre><code>./easyrsa build-server-full server nopass
+</code></pre>
+<p>Tạo certificate and key cho Client</p>
+<pre><code>./easyrsa build-client-full client1.domain.tld nopass
+</code></pre>
+<p>Tạo mới thu mục  <strong>VPNDemo</strong> copy các file được tạo vào thu mục</p>
+<pre tabindex="0"><code>cp .\pki\ca.crt .\VPNDemo
+cp .\pki\issued\server.crt .\VPNDemo\
+cp .\pki\issued\client1.domain.tld.crt .\VPNDemo\
+cp .\pki\private\server.key .\VPNDemo\
+cp .\pki\private\client1.domain.tld.key .\VPNDemo\
+</code></pre><p>Upload server,client certificate và key đến ACM bao gồm <strong>AZ ap-southeast-1</strong></p>
+<pre tabindex="0"><code>aws acm import-certificate --certificate fileb://server.crt --private-key fileb://server.key --certificate-chain fileb://ca.crt
+c:\EasyRSA-3.1.7-win64\EasyRSA-3.1.7\VPNDemo&gt;aws acm import-certificate --certificate fileb://server.crt --private-key fileb://server.key --certificate-chain fileb://ca.crt
+{
+    &#34;CertificateArn&#34;: &#34;arn:aws:acm:ap-southeast-1:339713040518:certificate/a8205d40-f792-4342-96b2-436d8f3ec8fd&#34;
+}
+
+aws acm import-certificate --certificate fileb://client1.domain.tld.crt --private-key fileb://client1.domain.tld.key --certificate-chain fileb://ca.crt
+
+c:\EasyRSA-3.1.7-win64\EasyRSA-3.1.7\VPNDemo&gt;aws acm import-certificate --certificate fileb://client1.domain.tld.crt --private-key fileb://client1.domain.tld.key --certificate-chain fileb://ca.crt
+{
+    &#34;CertificateArn&#34;: &#34;arn:aws:acm:ap-southeast-1:339713040518:certificate/a758b9ad-ee17-4dc2-85e6-c158e87f5bc6&#34;
+}
+</code></pre><p><img alt="Upload" src="/images/1-Introduce/aws.png?featherlight=false"></p>
+<p>Để sử dung đc AWS CLI chúng ta cần configure cho CLI
+<img alt="Upload" src="/images/1-Introduce/aws_config.png?featherlight=false"></p>
+<h4 id="2-tạo-client-vpn-endpoint">2. Tạo Client VPN endpoint</h4>
+<p>Login AWS  <a href="https://ap-southeast-2.signin.aws.amazon.com/">https://ap-southeast-2.signin.aws.amazon.com/</a></p>
+<h4 id="vpn--client-vpn-endpoints--create-client-vpn-endpoint-">VPN &gt; Client VPN endpoints &gt; Create Client VPN endpoint &gt;</h4>
+<p><img alt="VPN" src="/images/1-Introduce/create_VPN_1.png?featherlight=false&width=50pc"></p>
+<p>Chon certificate mà ta đã upload bằng CLI chú ý chổ server và client
+<img alt="VPN" src="/images/1-Introduce/create_VPN_2.png?featherlight=false&width=50pc"></p>
+<p>Sau khi tạo VPN chúng ta cần tạo thêm VPC và Subnet dành cho Client VPN endpoint sử dụng cấp phát cho người dùng
+<img alt="VPN" src="/images/1-Introduce/create_VPN_3.png?featherlight=false&width=50pc">
+<img alt="VPN" src="/images/1-Introduce/create_VPN_4.png?featherlight=false&width=50pc">
+<img alt="VPN" src="/images/1-Introduce/create_VPN_5.png?featherlight=false&width=50pc"></p>
+<p>Sau khi tạo VPN chúng ta cần tạo thêm VPC và Subnet dành cho Client VPN endpoint sử dụng, cấp phát cho người dùng
+<img alt="VPN" src="/images/1-Introduce/create_VPN_6.png?featherlight=false&width=50pc">
+<img alt="VPN" src="/images/1-Introduce/create_VPN_7.png?featherlight=false&width=50pc"></p>
+<p>Cuối cùng chúng ta download client configuration để dùng cho client<br>
+<img alt="VPN" src="/images/1-Introduce/create_VPN_8.png?featherlight=false">
+File download có tên downloaded-client-config.ovpn mở bàng node và Copy nội dung file vào cập thẻ <!-- raw HTML omitted -->client1.domain.tld.crt<!-- raw HTML omitted --> <!-- raw HTML omitted -->client1.domain.tld.key<!-- raw HTML omitted -->
+<img alt="VPN" src="/images/1-Introduce/create_VPN_9.png?featherlight=false">
+OK vậy là chúng ta đã hoàn tất cấu hình phía admin rồi giờ chúng ta qua bước tiếp theo để cấu hình cho Client</p>
+<h4 id="3-download-aws-client-vpn-for-desktop">3. Download aws Client VPN for Desktop</h4>
+<p>Chúng ta cần tool vpn để kết nối nên bạn cần vào Download  <a href="hhttps://aws.amazon.com/vpn/client-vpn-download/">AWS Client VPN for Desktop</a>
+<img alt="VPN" src="/images/1-Introduce/create_VPN_10.png?featherlight=false">
+Sau khi download thì bạn cài đặc AWS VPN Client và import downloaded-client-config.ovpn vào
+<img alt="VPN" src="/images/1-Introduce/create_VPN_11.png?featherlight=false">
+Giờ chúng ta thực hiện kết nối và kiểm tra thành quả của mình thôi nào</p>
+<p><img alt="VPN" src="/images/1-Introduce/connection_VPN.png?featherlight=false"></p>
+<p>Thực hiện kết nối VPN thôi nào khi kết nối xong bạn dùng lệnh kiểm tra IP sẽ thấy IP do AWS client VPN cấp</p>
 <h4 id="content">Content</h4>
 <ol>
 <li><a href="/vi/1-introduce/">Introduction to VPN</a></li>
@@ -433,19 +503,19 @@ bar
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1710300609"></script>
-    <script src="/js/perfect-scrollbar.min.js?1710300609"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1710300609"></script>
-    <script src="/js/jquery.sticky.js?1710300609"></script>
-    <script src="/js/featherlight.min.js?1710300609"></script>
-    <script src="/js/highlight.pack.js?1710300609"></script>
+    <script src="/js/clipboard.min.js?1710434826"></script>
+    <script src="/js/perfect-scrollbar.min.js?1710434826"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1710434826"></script>
+    <script src="/js/jquery.sticky.js?1710434826"></script>
+    <script src="/js/featherlight.min.js?1710434826"></script>
+    <script src="/js/highlight.pack.js?1710434826"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1710300609"></script>
-    <script src="/js/learn.js?1710300609"></script>
-    <script src="/js/hugo-learn.js?1710300609"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1710434826"></script>
+    <script src="/js/learn.js?1710434826"></script>
+    <script src="/js/hugo-learn.js?1710434826"></script>
 
-    <link href="/mermaid/mermaid.css?1710300609" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1710300609"></script>
+    <link href="/mermaid/mermaid.css?1710434826" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1710434826"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
